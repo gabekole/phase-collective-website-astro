@@ -1,5 +1,5 @@
 /* ============================================================
-   Phase — Global Styles
+   CLLCTV — Global Styles
    Minimalist premium music collective
    ============================================================ */
 
@@ -129,7 +129,7 @@ ul {
   width: 100%;
   max-width: 1280px;
   margin: 0 auto;
-  padding: calc(var(--nav-h) + clamp(48px, 8vw, 96px)) var(--section-px) clamp(64px, 10vw, 120px);
+  padding: calc(var(--nav-h) + clamp(24px, 4vw, 48px)) var(--section-px) clamp(64px, 10vw, 120px);
   display: flex;
   flex-direction: column;
   gap: clamp(40px, 7vw, 80px);
