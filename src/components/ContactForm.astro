@@ -1,0 +1,258 @@
+---
+// ContactForm.astro — POST to /api/contact
+---
+
+<form class="contact-form" id="contact-form" novalidate>
+  <div class="form-row">
+    <div class="form-group">
+      <label class="form-label" for="cf-name">Name</label>
+      <input
+        class="form-input"
+        id="cf-name"
+        name="name"
+        type="text"
+        required
+        autocomplete="name"
+        placeholder="Your name"
+      />
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="cf-email">Email</label>
+      <input
+        class="form-input"
+        id="cf-email"
+        name="email"
+        type="email"
+        required
+        autocomplete="email"
+        placeholder="your@email.com"
+      />
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label" for="cf-message">Message</label>
+    <textarea
+      class="form-input form-textarea"
+      id="cf-message"
+      name="message"
+      required
+      placeholder="Tell us about your project…"
+    ></textarea>
+  </div>
+
+  <div class="form-footer">
+    <button type="submit" class="form-submit">
+      <span class="submit-text">Send message</span>
+      <span class="submit-arrow" aria-hidden="true">→</span>
+    </button>
+    <p class="form-status" role="status" aria-live="polite"></p>
+  </div>
+</form>
+
+<style>
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(28px, 3.5vw, 44px);
+    width: 100%;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(20px, 3vw, 40px);
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .form-label {
+    display: block;
+    font-size: clamp(10px, 1vw, 11px);
+    font-weight: var(--weight-med);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gray-2);
+  }
+
+  .form-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--gray-3);
+    color: var(--white);
+    font-family: var(--font-sans);
+    font-size: clamp(14px, 1.4vw, 16px);
+    font-weight: var(--weight-light);
+    letter-spacing: 0.02em;
+    padding: 12px 0;
+    outline: none;
+    transition: border-color 0.25s ease;
+    -webkit-appearance: none;
+    appearance: none;
+    resize: none;
+    border-radius: 0;
+  }
+
+  .form-input::placeholder {
+    color: var(--gray-3);
+  }
+
+  .form-input:focus {
+    border-bottom-color: var(--white);
+  }
+
+  .form-input.is-invalid {
+    border-bottom-color: #c0392b;
+  }
+
+  .form-textarea {
+    min-height: 140px;
+  }
+
+  .form-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding-top: clamp(8px, 1.5vw, 16px);
+  }
+
+  .form-submit {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: none;
+    border: none;
+    color: var(--white);
+    cursor: pointer;
+    font-family: var(--font-sans);
+    font-size: clamp(11px, 1vw, 12px);
+    font-weight: var(--weight-med);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    padding: 0;
+    position: relative;
+  }
+
+  .form-submit::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--white);
+    transition: width 0.35s var(--ease-out);
+  }
+
+  .form-submit:not(:disabled):hover::after,
+  .form-submit:not(:disabled):focus-visible::after {
+    width: calc(100% - 32px);
+  }
+
+  .form-submit:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .submit-arrow {
+    display: inline-block;
+    transition: transform 0.3s var(--ease-out);
+  }
+
+  .form-submit:not(:disabled):hover .submit-arrow {
+    transform: translateX(6px);
+  }
+
+  .form-status {
+    font-size: 13px;
+    font-weight: var(--weight-light);
+    letter-spacing: 0.04em;
+    color: var(--gray-2);
+    min-height: 1.3em;
+  }
+
+  .form-status.is-error {
+    color: #e05252;
+  }
+
+  @media (max-width: 560px) {
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  if (form) {
+    const statusEl = form.querySelector<HTMLParagraphElement>('.form-status')!;
+    const submitBtn = form.querySelector<HTMLButtonElement>('.form-submit')!;
+    const submitText = submitBtn.querySelector<HTMLSpanElement>('.submit-text')!;
+
+    function setStatus(msg: string, isError = false) {
+      statusEl.textContent = msg;
+      statusEl.className = 'form-status' + (isError ? ' is-error' : '');
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Clear previous error states
+      form.querySelectorAll('.is-invalid').forEach((el) => el.classList.remove('is-invalid'));
+      setStatus('');
+
+      // Client-side validation
+      const nameEl = form.querySelector<HTMLInputElement>('#cf-name')!;
+      const emailEl = form.querySelector<HTMLInputElement>('#cf-email')!;
+      const messageEl = form.querySelector<HTMLTextAreaElement>('#cf-message')!;
+
+      let valid = true;
+      if (!nameEl.value.trim()) {
+        nameEl.classList.add('is-invalid');
+        valid = false;
+      }
+      if (!emailEl.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value)) {
+        emailEl.classList.add('is-invalid');
+        valid = false;
+      }
+      if (!messageEl.value.trim()) {
+        messageEl.classList.add('is-invalid');
+        valid = false;
+      }
+      if (!valid) {
+        setStatus('Please fill in all required fields correctly.', true);
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitText.textContent = 'Sending\u2026';
+
+      try {
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          body: new FormData(form),
+        });
+        const json = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+
+        if (res.ok && json.ok) {
+          form.reset();
+          setStatus('Your message has been sent. We\u2019ll be in touch.');
+        } else {
+          setStatus(json.error ?? 'Something went wrong. Please try again.', true);
+        }
+      } catch {
+        setStatus('Connection error. Please try again.', true);
+      } finally {
+        submitBtn.disabled = false;
+        submitText.textContent = 'Send message';
+      }
+    });
+  }
+</script>

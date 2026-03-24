@@ -2,8 +2,8 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import ContactForm from '../components/ContactForm.astro';
 
-const services = ['Production', 'Booking', 'Merchandise', 'Visual'];
 const cities = ['New York', 'Philadelphia', 'Los Angeles'];
 ---
 
@@ -14,6 +14,12 @@ const cities = ['New York', 'Philadelphia', 'Los Angeles'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="We connect artists of every scale and sound with the industry's most sought-after talent." />
     <title>Collective — Bridging the gap between independence and excellence</title>
+    <link rel="icon" type="image/x-icon"       href="/images/favicon_io/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="16x16"  href="/images/favicon_io/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32"  href="/images/favicon_io/favicon-32x32.png" />
+    <link rel="apple-touch-icon" sizes="180x180"     href="/images/favicon_io/apple-touch-icon.png" />
+    <link rel="manifest"                             href="/images/favicon_io/site.webmanifest" />
+    <meta name="theme-color" content="#000000" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
@@ -27,6 +33,9 @@ const cities = ['New York', 'Philadelphia', 'Los Angeles'];
 
       <!-- ① HERO -->
       <section class="hero" id="hero">
+        <div class="hero-bg" aria-hidden="true">
+          <img src="/images/hero-bg.jpg" alt="" class="hero-bg-img" onerror="this.parentElement.style.display='none'" />
+        </div>
         <div class="hero-inner">
           <div class="hero-cities reveal">
             {cities.map((city, i) => (
@@ -67,24 +76,6 @@ const cities = ['New York', 'Philadelphia', 'Los Angeles'];
         </div>
       </section>
 
-      <!-- ③ SERVICES -->
-      <section class="services" id="services">
-        <div class="section-inner">
-          <div class="services-header reveal">
-            <span class="label-text">Services</span>
-          </div>
-          <ul class="services-list">
-            {services.map((service, i) => (
-              <li class="service-item reveal" style={`--i:${i}`}>
-                <span class="service-num">0{i + 1}</span>
-                <span class="service-name">{service}</span>
-                <span class="service-line"></span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
       <!-- ④ CONTACT -->
       <section class="contact" id="contact">
         <div class="section-inner">
@@ -96,14 +87,7 @@ const cities = ['New York', 'Philadelphia', 'Los Angeles'];
               <p class="contact-heading reveal">
                 Ready to build<br /><span class="italic">on your terms?</span>
               </p>
-              <div class="contact-links reveal">
-                <a href="mailto:contact@phasecollectives.com" class="contact-link">contact@phasecollectives.com</a>
-                <div class="contact-cities">
-                  {cities.map(city => (
-                    <span class="contact-city">{city}</span>
-                  ))}
-                </div>
-              </div>
+              <ContactForm />
             </div>
           </div>
         </div>

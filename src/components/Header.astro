@@ -1,127 +1,111 @@
 ---
-const year = new Date().getFullYear();
-
-const cities = ['New York', 'Philadelphia', 'Los Angeles'];
 ---
 
-<footer class="site-footer">
-  <div class="footer-inner">
+<header class="site-header">
+  <nav class="site-nav" aria-label="Main navigation">
+    <a href="/" class="nav-logo" aria-label="Phase — home">
+      <img
+        src="/images/Phase_logo_invert.svg"
+        alt="Phase"
+        class="nav-logo-img"
+        width="80"
+        height="32"
+      />
+    </a>
 
-    <div class="footer-top">
-      <span class="footer-logo">Phase LLC</span>
-    </div>
-
-    <div class="footer-bottom">
-      
-	</div>
-
-  </div>
-</footer>
+    <ul class="nav-links" role="list">
+      <li><a href="#about"   class="nav-link">About</a></li>
+      <li><a href="#contact" class="nav-link">Contact</a></li>
+    </ul>
+  </nav>
+</header>
 
 <style>
-  .site-footer {
-    border-top: 1px solid var(--gray-4);
-    padding: clamp(32px, 5vw, 56px) var(--section-px);
+  .site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    height: var(--nav-h);
+    /* Subtle blur backdrop so text underneath doesn't clash */
+    background: rgba(0, 0, 0, 0.72);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--gray-4);
   }
 
-  .footer-inner {
+  .site-nav {
     max-width: 1280px;
     margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: clamp(28px, 4vw, 48px);
-  }
-
-  /* Top row */
-  .footer-top {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 24px;
-    flex-wrap: wrap;
-  }
-
-  .footer-logo {
-    font-size: 11px;
-    font-weight: var(--weight-med);
-    letter-spacing: 0.28em;
-    color: var(--gray-3);
-    text-transform: uppercase;
-  }
-
-  .footer-cities {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0;
-  }
-
-  .footer-city {
-    font-size: 11px;
-    font-weight: var(--weight-light);
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--gray-3);
-  }
-
-  .footer-city:not(:last-child)::after {
-    content: ' — ';
-    white-space: pre;
-    color: var(--gray-4);
-  }
-
-  /* Bottom row */
-  .footer-bottom {
+    height: 100%;
+    padding: 0 var(--section-px);
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 24px;
-    flex-wrap: wrap;
-    padding-top: clamp(20px, 3vw, 32px);
-    border-top: 1px solid var(--gray-4);
   }
 
-  .footer-copy {
-    font-size: 11px;
-    font-weight: var(--weight-light);
-    letter-spacing: 0.06em;
-    color: var(--gray-3);
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
   }
 
-  .footer-email {
+  .nav-logo-img {
+    /* The SVG has built-in padding so we clip it visually */
+    height: 38px;
+    width: auto;
+    /* Nudge left to optically align with page edge */
+    margin-left: -4px;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-link {
     font-size: 11px;
-    font-weight: var(--weight-light);
-    letter-spacing: 0.06em;
-    color: var(--gray-3);
+    font-weight: var(--weight-med);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gray-2);
     text-decoration: none;
     position: relative;
     transition: color 0.2s ease;
   }
 
-  .footer-email::after {
+  .nav-link::after {
     content: '';
     position: absolute;
-    bottom: -2px;
+    bottom: -3px;
     left: 0;
     width: 0;
     height: 1px;
-    background: var(--gray-3);
+    background: var(--white);
     transition: width 0.3s var(--ease-out);
   }
 
-  .footer-email:hover {
+  .nav-link:hover {
     color: var(--white);
   }
 
-  .footer-email:hover::after {
+  .nav-link:hover::after {
     width: 100%;
-    background: var(--white);
   }
 
   @media (max-width: 480px) {
-    .footer-top,
-    .footer-bottom {
-      flex-direction: column;
-      gap: 12px;
+    .nav-links {
+      gap: 20px;
+    }
+
+    .nav-link {
+      font-size: 10px;
     }
   }
 </style>

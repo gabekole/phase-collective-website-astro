@@ -8,7 +8,15 @@ const cities = ['New York', 'Philadelphia', 'Los Angeles'];
   <div class="footer-inner">
 
     <div class="footer-top">
-      <span class="footer-logo">Phase</span>
+      <a href="/" class="footer-logo-link" aria-label="Phase — home">
+        <img
+          src="/images/Phase_logo_invert.svg"
+          alt="Phase"
+          class="footer-logo-img"
+          width="72"
+          height="28"
+        />
+      </a>
       <div class="footer-cities">
         {cities.map((city, i) => (
           <span class="footer-city" style={`--i:${i}`}>{city}</span>
@@ -47,12 +55,21 @@ const cities = ['New York', 'Philadelphia', 'Los Angeles'];
     flex-wrap: wrap;
   }
 
-  .footer-logo {
-    font-size: 11px;
-    font-weight: var(--weight-med);
-    letter-spacing: 0.28em;
-    color: var(--gray-3);
-    text-transform: uppercase;
+  .footer-logo-link {
+    display: inline-flex;
+    align-items: center;
+    margin-left: -3px;
+  }
+
+  .footer-logo-img {
+    height: 30px;
+    width: auto;
+    opacity: 0.45;
+    transition: opacity 0.2s ease;
+  }
+
+  .footer-logo-link:hover .footer-logo-img {
+    opacity: 0.75;
   }
 
   .footer-cities {

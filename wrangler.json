@@ -10,5 +10,8 @@
 	"observability": {
 		"enabled": true
 	},
-	"upload_source_maps": true
+	"upload_source_maps": true,
+	"vars": {
+		"CONTACT_EMAIL": "contact@phasecollectives.com"
+	}
 }
