@@ -122,7 +122,6 @@ ul {
   display: flex;
   align-items: center;
   border-bottom: 1px solid var(--gray-4);
-  overflow: hidden;
 }
 
 .hero-bg {
@@ -221,22 +220,6 @@ ul {
 .hero-bottom {
   display: flex;
   align-items: flex-end;
-}
-
-.scroll-cue {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 1px;
-  overflow: hidden;
-}
-
-.scroll-line {
-  display: block;
-  width: 1px;
-  height: 64px;
-  background: linear-gradient(to bottom, transparent, var(--gray-3));
-  animation: scrollPulse 2.2s var(--ease-in-out) infinite;
 }
 
 /* ── About ─────────────────────────────────────────────────── */
@@ -411,6 +394,33 @@ ul {
 @keyframes heroFadeIn {
   from { opacity: 0; }
   to   { opacity: 1; }
+}
+
+@keyframes scrollBounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(7px); }
+}
+
+@keyframes scrollCueFade {
+  from { opacity: 0; }
+  to   { opacity: 0.55; }
+}
+
+.scroll-cue {
+  position: fixed;
+  bottom: clamp(20px, 4vh, 40px);
+  left: 50%;
+  margin-left: -12px; /* half of 24px icon */
+  z-index: 10;
+  color: var(--white);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.scroll-cue-inner {
+  display: block;
+  animation: scrollBounce 1.2s ease-in-out infinite;
 }
 
 @keyframes fadeUp {
