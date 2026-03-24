@@ -37,22 +37,12 @@ const cities = ['New York', 'Philadelphia', 'Los Angeles'];
           <img src="/images/hero-bg.jpg" alt="" class="hero-bg-img" onerror="this.parentElement.style.display='none'" />
         </div>
         <div class="hero-inner">
-          <div class="hero-cities reveal">
-            {cities.map((city, i) => (
-              <span class="city-name" style={`--i:${i}`}>{city}</span>
-            ))}
-          </div>
-
-          <h1 class="hero-headline reveal">
-            <span class="headline-line">Bridging the gap</span>
-            <span class="headline-line italic">between independence</span>
-            <span class="headline-line">and excellence.</span>
-          </h1>
-
-          <div class="hero-bottom reveal">
-            <a href="#about" class="scroll-cue" aria-label="Scroll down">
-              <span class="scroll-line"></span>
-            </a>
+          <div class="hero-logo">
+            <img
+              src="/images/Phase_logo_invert.svg"
+              alt="Phase"
+              class="hero-logo-img"
+            />
           </div>
         </div>
       </section>
@@ -98,6 +88,27 @@ const cities = ['New York', 'Philadelphia', 'Los Angeles'];
     <Footer />
 
     <script>
+      // ── Header hide/reveal on scroll ───────────────────────────────────────
+      const siteHeader = document.querySelector('.site-header') as HTMLElement | null;
+      if (siteHeader) {
+        // Start hidden
+        siteHeader.style.transform = 'translateY(-100%)';
+        siteHeader.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
+
+        const heroEl = document.getElementById('hero');
+        const heroObserver = new IntersectionObserver(
+          ([entry]) => {
+            if (entry.isIntersecting) {
+              siteHeader.style.transform = 'translateY(-100%)';
+            } else {
+              siteHeader.style.transform = 'translateY(0)';
+            }
+          },
+          { threshold: 0.1 }
+        );
+        if (heroEl) heroObserver.observe(heroEl);
+      }
+
       // ── Scroll reveal ──────────────────────────────────────────────────────
       const revealEls = document.querySelectorAll('.reveal');
 

@@ -118,7 +118,7 @@ ul {
 
 .hero {
   position: relative;
-  min-height: 100svh;
+  height: 100svh;
   display: flex;
   align-items: center;
   border-bottom: 1px solid var(--gray-4);
@@ -145,16 +145,39 @@ ul {
   width: 100%;
   max-width: 1280px;
   margin: 0 auto;
-  padding: calc(var(--nav-h) + clamp(24px, 4vw, 48px)) var(--section-px) clamp(64px, 10vw, 120px);
+  padding: var(--section-px);
   display: flex;
-  flex-direction: column;
-  gap: clamp(40px, 7vw, 80px);
+  align-items: center;
+  justify-content: center;
 }
 
 .hero-cities {
   display: flex;
   flex-wrap: wrap;
   gap: 0;
+}
+
+.hero-logo {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.hero-logo-img {
+  width: auto;
+  height: auto;
+  max-width: clamp(260px, 60vw, 820px);
+  max-height: 55vh;
+  display: block;
+  animation: heroFadeIn 1.4s var(--ease-out) both;
+  animation-delay: 0.15s;
+}
+
+@media (min-width: 769px) {
+  .hero-logo-img {
+    max-width: clamp(600px, 72vw, 1200px);
+    max-height: 72vh;
+  }
 }
 
 .city-name {
@@ -384,6 +407,11 @@ ul {
 }
 
 /* ── Keyframes ─────────────────────────────────────────────── */
+
+@keyframes heroFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
 
 @keyframes fadeUp {
   from {
