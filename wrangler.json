@@ -12,6 +12,7 @@
 	},
 	"upload_source_maps": true,
 	"vars": {
-		"CONTACT_EMAIL": "contact@phasecollectives.com"
+		"CONTACT_EMAIL": "warpmusic.biz@gmail.com",
+		"RESEND_API_KEY": "re_jC2u2oK3_D9YJ4GPUcSoESJGYuqdrNin8"
 	}
 }

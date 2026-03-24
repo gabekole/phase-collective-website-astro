@@ -9,7 +9,7 @@ function jsonResponse(data: Record<string, unknown>, status: number): Response {
   });
 }
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
   // Basic CSRF guard: origin must match the request host
   const origin = request.headers.get('origin');
   if (origin) {
@@ -51,45 +51,38 @@ export const POST: APIRoute = async ({ request }) => {
     return jsonResponse({ error: 'Invalid email address.' }, 422);
   }
   // Recipient — override via CONTACT_EMAIL env var (set in Cloudflare dashboard or wrangler.json vars)
-  const env = (request as unknown as { cf?: { env?: { CONTACT_EMAIL?: string } } }).cf?.env;
-  const recipientEmail =
-    (env?.CONTACT_EMAIL) ?? 'contact@phasecollectives.com';
+  const runtime = (locals as { runtime?: { env?: { CONTACT_EMAIL?: string; RESEND_API_KEY?: string } } }).runtime;
+  const recipientEmail = runtime?.env?.CONTACT_EMAIL ?? 'contact@phasecollectives.com';
+  const resendApiKey = runtime?.env?.RESEND_API_KEY;
 
-  // Send via MailChannels (free on Cloudflare Workers)
-  // Requires a _mailchannels TXT record on your domain for domain-lock.
-  // See: https://support.mailchannels.com/hc/en-us/articles/16918954360845
+  if (!resendApiKey) {
+    console.error('[contact] RESEND_API_KEY is not set');
+    return jsonResponse({ error: 'Server configuration error.' }, 500);
+  }
+
+  // Send via Resend (https://resend.com — free tier: 3,000 emails/month)
   try {
-    const mcResponse = await fetch('https://api.mailchannels.net/tx/v1/send', {
+    const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
-      headers: { 'content-type': 'application/json' },
+      headers: {
+        'content-type': 'application/json',
+        'authorization': `Bearer ${resendApiKey}`,
+      },
       body: JSON.stringify({
-        personalizations: [{ to: [{ email: recipientEmail, name: 'Phase Collective' }] }],
-        from: {
-          email: 'noreply@phasecollectives.com',
-          name: 'Phase Collective Website',
-        },
-        reply_to: { email, name },
+        from: 'Phase Collective <noreply@phasecollectives.com>',
+        to: [recipientEmail],
+        reply_to: email,
         subject: `Contact form submission \u2014 ${name}`,
-        content: [
-          {
-            type: 'text/plain',
-            value: [
-              `Name:    ${name}`,
-              `Email:   ${email}`,
-              '',
-              message,
-            ].join('\n'),
-          },
-        ],
+        text: [`Name:    ${name}`, `Email:   ${email}`, '', message].join('\n'),
       }),
     });
 
-    if (mcResponse.status === 202) {
+    if (res.ok) {
       return jsonResponse({ ok: true }, 200);
     }
 
-    const body = await mcResponse.text();
-    console.error('[contact] MailChannels error', mcResponse.status, body);
+    const body = await res.text();
+    console.error('[contact] Resend error', res.status, body);
     return jsonResponse({ error: 'Failed to send message. Please try again.' }, 500);
   } catch (err) {
     console.error('[contact] fetch error', err);
