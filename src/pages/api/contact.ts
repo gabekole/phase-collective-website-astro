@@ -69,7 +69,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
         'authorization': `Bearer ${resendApiKey}`,
       },
       body: JSON.stringify({
-        from: 'Phase Collective <noreply@phasecollectives.com>',
+        from: 'Phase Collective <contact@phasecollectives.com>',
         to: [recipientEmail],
         reply_to: email,
         subject: `Contact form submission \u2014 ${name}`,
